@@ -42,8 +42,6 @@ while True:
         centerPoint = hand['center']
         handType = hand["type"]
 
-        #print(centerPoint)
-
         if centerPoint[1]<300 and centerPoint[0]>300 and centerPoint[0]<700:
             print("up")
         if centerPoint[1]>400 and centerPoint[0]>300 and centerPoint[0]<700:
