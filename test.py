@@ -2,12 +2,14 @@ from cvzone.HandTrackingModule import HandDetector
 import cv2
 import cvzone
 import numpy as np
+from pynput.keyboard import Controller
 
 cap = cv2.VideoCapture(0)
 cap.set(3,1280)
 cap.set(4,720)
 
 detector = HandDetector(detectionCon=0.5, maxHands=1)
+keyboard = Controller()
 
 def drawAll(img, button):
      imgNew = np.zeros_like(img, np.uint8)
@@ -32,9 +34,10 @@ myButton3 = Button([500, 250], "center")
 
 while True:
     success, img = cap.read()
+    img = cv2.flip(img,1)
     hands, img = detector.findHands(img)
     img = drawAll(img, myButton3)
-
+    
     if hands:
         hand = hands[0]
         lmList = hand["lmList"]
@@ -43,13 +46,17 @@ while True:
         handType = hand["type"]
 
         if centerPoint[1]<300 and centerPoint[0]>300 and centerPoint[0]<700:
+            #keyboard.press('up')
             print("up")
         if centerPoint[1]>400 and centerPoint[0]>300 and centerPoint[0]<700:
+            #keyboard.press('down')
             print("down")
         if centerPoint[0]<300 and centerPoint[1]>300 and centerPoint[1]<700:
-            print("right")
-        if centerPoint[0]>700 and centerPoint[1]>300 and centerPoint[1]<700:
+            #keyboard.press('right')
             print("left")
+        if centerPoint[0]>700 and centerPoint[1]>300 and centerPoint[1]<700:
+            #keyboard.press('left')
+            print("right")
     
 
     cv2.imshow("Image", img)
