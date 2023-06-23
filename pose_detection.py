@@ -18,7 +18,8 @@ while True:
         cv2.circle(img, center, 5, (255, 0, 255), cv2.FILLED)
 
         #print(lmList)
-    a = angle.findAngle(img, 11, 13,15)
+    if lmList:
+        a = angle.findAngle(img, 11, 13,15)
 
     print(a)
      
