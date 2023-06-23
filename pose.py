@@ -3,7 +3,6 @@ import cv2
 import cvzone
 import numpy as np
 from pynput.keyboard import Key, Controller
-from dependencies import posemodule
 
 cap = cv2.VideoCapture(0)
 cap.set(3,1280)
@@ -46,6 +45,10 @@ while True:
         centerPoint = hand['center']
         handType = hand["type"]
 
+        print(lmList)
+
+
+        '''
         if centerPoint[1]<300 and centerPoint[0]>300 and centerPoint[0]<700:
             keyboard.press(Key.up)
             print("up")
@@ -58,7 +61,7 @@ while True:
         if centerPoint[0]>700 and centerPoint[1]>300 and centerPoint[1]<700:
             keyboard.press(Key.right)
             print("right")
-    
+        '''
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
