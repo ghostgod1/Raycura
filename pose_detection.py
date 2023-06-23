@@ -21,11 +21,6 @@ while True:
     if lmList:
         a = angle.findAngle(img, 11, 13,15)
 
-    print(a)
-     
-
-    
-
     cv2.imshow("Image", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
