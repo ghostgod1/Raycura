@@ -2,7 +2,7 @@ from cvzone.HandTrackingModule import HandDetector
 import cv2
 import cvzone
 import numpy as np
-from pynput.keyboard import Controller
+from pynput.keyboard import Key, Controller
 
 cap = cv2.VideoCapture(0)
 cap.set(3,1280)
@@ -46,16 +46,16 @@ while True:
         handType = hand["type"]
 
         if centerPoint[1]<300 and centerPoint[0]>300 and centerPoint[0]<700:
-            #keyboard.press('up')
+            keyboard.press(Key.up)
             print("up")
         if centerPoint[1]>400 and centerPoint[0]>300 and centerPoint[0]<700:
-            #keyboard.press('down')
+            keyboard.press(Key.down)
             print("down")
         if centerPoint[0]<300 and centerPoint[1]>300 and centerPoint[1]<700:
-            #keyboard.press('right')
+            keyboard.press(Key.left)
             print("left")
         if centerPoint[0]>700 and centerPoint[1]>300 and centerPoint[1]<700:
-            #keyboard.press('left')
+            keyboard.press(Key.right)
             print("right")
     
 
