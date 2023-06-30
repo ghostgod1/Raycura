@@ -19,11 +19,11 @@ while True:
         #print(lmList)
     if lmList:
         a = angle.findAngle(img, 11, 13,15)
+        b = angle.findAngle(img, 13, 11, 23)
 
-    print(a)
-     
+        d = angle.findDistance(11, 13, img)
 
-    
+        print(d)
 
     cv2.imshow("Image", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
