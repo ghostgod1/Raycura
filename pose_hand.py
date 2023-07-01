@@ -36,7 +36,7 @@ while True:
         color = (255, 0, 0)
         thickness = 2
 
-        a = [rightShoulder[0]+1000, rightShoulder[1] - 1000]
+        a = [rightShoulder[0]+1000, rightShoulder[1]-1000]
         b = [rightShoulder[0]-1000, rightShoulder[1]+1000]
 
         img = cv2.rectangle(img, start_point, end_point,color,thickness)
