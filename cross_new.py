@@ -35,8 +35,11 @@ while True:
         center = bboxInfo["center"]
         cv2.circle(img, center, 5, (255, 0, 255), cv2.FILLED)
 
-        rightShoulder = lmListPose[11][1:3]
+        
 
+        
+
+        rightShoulder = lmListPose[11][1:3]
         start_point= [rightShoulder[0] - 1000, rightShoulder[1] - 1000]
         end_point = [rightShoulder[0] + 1000, rightShoulder[1] + 1000]
         color = (255, 0, 0)
@@ -49,7 +52,15 @@ while True:
         img = cv2.line(img, start_point, end_point, color, thickness)
         img = cv2.line(img, a, b, color, thickness)
 
-        print(Angle(12,11,start_point))
+        dist = poseDetect.findDistance(11,12,img)
+        c = [rightShoulder[0]-int(dist), rightShoulder[1]]
+        img = cv2.line(img, rightShoulder, c, color, thickness)
+
+        X = lmListPose[12][1] - c[0]
+        Y = lmListPose[12][2] - c[1]
+
+        
+        #print(Angle(12,11,start_point))
 
     #Hand Detection
     hands, img = handDetect.findHands(img)
