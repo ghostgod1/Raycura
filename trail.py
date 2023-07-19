@@ -81,15 +81,7 @@ while True:
             #Hand landmark below middle finger
             landmark = lmList[9][0:2]
 
-
-
-
-
-
-            #trail
-
             point = [rightShoulder[0]+100, rightShoulder[1]-100]
-
 
             angle_NE = Angle(point, rightShoulder, north_east)
             angle_SE = Angle(point, rightShoulder, south_east) 
@@ -98,28 +90,14 @@ while True:
 
             angle_LM = Angle(point, rightShoulder, landmark)
 
-            # print("NE :", angle_NE)
-            # print("SE :", angle_SE)
-            # print("SW :", angle_SW)
-            # print("NW :", angle_NW)
-
             if angle_LM > angle_NE and angle_LM < angle_SE:
                 print("Right")
             if angle_LM > angle_SE and angle_LM < angle_SW:
                 print("Down")
             if angle_LM > angle_SW and angle_LM < angle_NW:
                 print("Left")
-            if angle_LM > angle_NW and angle_LM < angle_NE - 1:
+            if angle_LM > angle_NW and angle_LM < 359:
                 print("Up")
-
-
-
-
-
-
-
-
-
 
     cv2.imshow("Image", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
