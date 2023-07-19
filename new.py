@@ -63,7 +63,7 @@ while True:
         north_west = rotate_point(rightShoulder[0] - 1000, rightShoulder[1] - 1000,rightShoulder[0],rightShoulder[1], A-45)
 
         #circle
-        img = cv2.circle(img, rightShoulder, 150, (0, 0, 0), 3)
+        img = cv2.circle(img, rightShoulder, 150, (255, 255, 255), 3)
         
         #drawing lines 
         img = cv2.line(img, rightShoulder, north_east, blue, 2)  #north-east line
