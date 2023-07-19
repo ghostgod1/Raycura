@@ -104,6 +104,7 @@ while True:
 
 
             circle_bound = (landmark[0]-rightShoulder[0])**2 + (landmark[1]-rightShoulder[1])**2 > 150**2
+            
             if circle_bound:
                 if landmark[0] > rightShoulder[0] and landmark[1] < l2_y and landmark[1] > l4_y:
                     print("Right side")
