@@ -3,11 +3,6 @@ from dependencies.posemodule import posedetector
 import cv2
 import math
 
-#CV2 setup
-cap = cv2.VideoCapture(0)
-cap.set(3,1280)
-cap.set(4,720)
-
 #Mediapipe class calls
 handDetect = HandDetector(detectionCon=0.5, maxHands=1)
 poseDetect = posedetector()
@@ -33,11 +28,16 @@ def rotate_point(x, y, cx, cy, angle):
     y_rotated = int(-(x - cx) * math.sin(angle_rad) + (y - cy) * math.cos(angle_rad) + cy)
     return [x_rotated, y_rotated]
 
+#colors for lines
 red = (0,0,255)
 green = (0,255,0)
 blue = (255,0,0)
 black = (0,0,0)
 
+#CV2 setup
+cap = cv2.VideoCapture(0)
+cap.set(3,1280)
+cap.set(4,720)
 
 while True:
     success, img = cap.read()
