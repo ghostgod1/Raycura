@@ -57,10 +57,10 @@ while True:
         
 
         #updated points for moving lines
-        north_east = rotate_point(rightShoulder[0] + 1000, rightShoulder[1] - 1000,rightShoulder[0],rightShoulder[1], A-45)
-        south_east = rotate_point(rightShoulder[0] + 1000, rightShoulder[1] + 1000,rightShoulder[0],rightShoulder[1], A-45)
-        south_west = rotate_point(rightShoulder[0] - 1000, rightShoulder[1] + 1000,rightShoulder[0],rightShoulder[1], A-45)
-        north_west = rotate_point(rightShoulder[0] - 1000, rightShoulder[1] - 1000,rightShoulder[0],rightShoulder[1], A-45)
+        north_east = rotate_point(rightShoulder[0] + 1000, rightShoulder[1] - 1000, rightShoulder[0], rightShoulder[1], A-45)
+        south_east = rotate_point(rightShoulder[0] + 1000, rightShoulder[1] + 1000, rightShoulder[0], rightShoulder[1], A-45)
+        south_west = rotate_point(rightShoulder[0] - 1000, rightShoulder[1] + 1000, rightShoulder[0], rightShoulder[1], A-45)
+        north_west = rotate_point(rightShoulder[0] - 1000, rightShoulder[1] - 1000, rightShoulder[0], rightShoulder[1], A-45)
 
         #circle
         img = cv2.circle(img, rightShoulder, 150, (255, 255, 255), 3)
