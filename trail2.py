@@ -33,7 +33,7 @@ blue = (255,0,0)
 black = (0,0,0)
 
 #CV2 setup
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(3,1280)
 cap.set(4,720)
 
@@ -72,25 +72,28 @@ while True:
 
 
 
-        point = [rightShoulder[0]+100, rightShoulder[1]-100]
+        #point = [rightShoulder[0]+100, rightShoulder[1]-100]
 
         landmark = lmListPose[19][1:3]
 
-        angle_NE = Angle(point, rightShoulder, north_east)
-        angle_SE = Angle(point, rightShoulder, south_east) 
-        angle_SW = Angle(point, rightShoulder, south_west) 
-        angle_NW = Angle(point, rightShoulder, north_west)  
+        angle_NE = Angle(north_east, rightShoulder, north_east)   #0 deg
+        angle_SE = Angle(north_east, rightShoulder, south_east)   #90 deg
+        angle_SW = Angle(north_east, rightShoulder, south_west)   #180 deh
+        angle_NW = Angle(north_east, rightShoulder, north_west)   #270 deg
 
-        angle_LM = Angle(point, rightShoulder, landmark)
+        angle_LM = Angle(north_east, rightShoulder, landmark)
 
-        if (angle_LM > angle_NE or angle_LM > 360 - angle_NE) and angle_LM < angle_SE:
-            print("Right")
-        if angle_LM < angle_SW and angle_LM > angle_SE:
-            print("Down")
-        if angle_LM < angle_NW and angle_LM > angle_SW:
-            print("Left")
-        if (angle_LM < angle_NE or angle_LM < 360 - angle_NE) and (angle_LM > angle_NW or angle_LM > 270 + angle_NW):
-            print("Up")
+        circle_bound = (landmark[0]-rightShoulder[0])**2 + (landmark[1]-rightShoulder[1])**2 > 150**2
+
+        if circle_bound:
+            if angle_LM > angle_NE and angle_LM < angle_SE:
+                print("Right")
+            if angle_LM < angle_SW and angle_LM > angle_SE:
+                print("Down")
+            if angle_LM < angle_NW and angle_LM > angle_SW:
+                print("Left")
+            if angle_LM < 360 - angle_NE and angle_LM > angle_NW:
+                print("Up")
 
     cv2.imshow("Image", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
