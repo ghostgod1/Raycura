@@ -76,7 +76,7 @@ while True:
 
         landmark = lmListPose[19][1:3]
 
-        angle_NE = Angle(north_east, rightShoulder, north_east)   #0 deg
+        angle_NE = Angle(north_east, rightShoulder, north_east)   #0 deg / 360 deg
         angle_SE = Angle(north_east, rightShoulder, south_east)   #90 deg
         angle_SW = Angle(north_east, rightShoulder, south_west)   #180 deh
         angle_NW = Angle(north_east, rightShoulder, north_west)   #270 deg
