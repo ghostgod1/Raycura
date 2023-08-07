@@ -104,8 +104,10 @@ while True:
 
             if angle_LM > 270 and angle_LM < 360:
                 print("Up")
+
+        distance = ((rightShoulder[0]-landmark[0])**2 + (rightShoulder[1]-landmark[1]))**0.5
                 
-        data.writerow([Date,Time,landmark[0],landmark[1]])
+        data.writerow([Date,Time,landmark[0],landmark[1],distance])
                 
 
     cv2.imshow("Image", img)
