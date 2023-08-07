@@ -3,13 +3,13 @@ import mediapipe as mp
 import math
 
 
-class posedetector:
+class PoseDetector:
     """
     Estimates Pose points of a human body using the mediapipe library.
     """
 
-    def __init__(self, mode=True, smooth=True,
-                 detectionCon=0.6, trackCon=0.5):
+    def __init__(self, mode=False, smooth=True,
+                 detectionCon=0.5, trackCon=0.5):
         """
         :param mode: In static mode, detection is done on each image: slower
         :param upBody: Upper boy only flag
@@ -54,7 +54,28 @@ class posedetector:
                 cx, cy, cz = int(lm.x * w), int(lm.y * h), int(lm.z * w)
                 self.lmList.append([id, cx, cy, cz])
 
-        return self.lmList
+            # Bounding Box
+            ad = abs(self.lmList[12][1] - self.lmList[11][1]) // 2
+            if bboxWithHands:
+                x1 = self.lmList[16][1] - ad
+                x2 = self.lmList[15][1] + ad
+            else:
+                x1 = self.lmList[12][1] - ad
+                x2 = self.lmList[11][1] + ad
+
+            y2 = self.lmList[29][2] + ad
+            y1 = self.lmList[1][2] - ad
+            bbox = (x1, y1, x2 - x1, y2 - y1)
+            cx, cy = bbox[0] + (bbox[2] // 2), \
+                     bbox[1] + bbox[3] // 2
+
+            self.bboxInfo = {"bbox": bbox, "center": (cx, cy)}
+
+            if draw:
+                cv2.rectangle(img, bbox, (255, 0, 255), 3)
+                cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
+
+        return self.lmList, self.bboxInfo
 
     def findAngle(self, img, p1, p2, p3, draw=True):
         """
@@ -105,7 +126,7 @@ class posedetector:
             cv2.circle(img, (cx, cy), r, (0, 0, 255), cv2.FILLED)
         length = math.hypot(x2 - x1, y2 - y1)
 
-        return length#, img, [x1, y1, x2, y2, cx, cy]
+        return length, img, [x1, y1, x2, y2, cx, cy]
 
     def angleCheck(self, myAngle, targetAngle, addOn=20):
         return targetAngle - addOn < myAngle < targetAngle + addOn
@@ -113,7 +134,7 @@ class posedetector:
 
 def main():
     cap = cv2.VideoCapture(0)
-    detector = posedetector()
+    detector = PoseDetector()
     while True:
         success, img = cap.read()
         img = detector.findPose(img)

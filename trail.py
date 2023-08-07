@@ -1,9 +1,18 @@
-from dependencies.posemodule import posedetector
+
+from dependencies.posemodule import PoseDetector
 import cv2
 import math
+import csv
+from datetime import datetime
 
-#Mediapipe class calls
-poseDetect = posedetector()
+Time = datetime.now().strftime("%H:%M:%S")
+Date = datetime.now().strftime("%Y-%m-%d")
+
+f = open("User.csv", 'a', newline='', encoding='utf8')
+data = csv.writer(f)
+
+
+
 
 #function for calling angle
 def Angle(p1, p2, p3):  
@@ -33,36 +42,43 @@ blue = (255,0,0)
 black = (0,0,0)
 
 #CV2 setup
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
+detector = PoseDetector()
 cap.set(3,1280)
 cap.set(4,720)
-
+    
 while True:
+
+    Time = datetime.now().strftime("%H:%M:%S")
+
     success, img = cap.read()
     img = cv2.flip(img,1)
+    img = detector.findPose(img)
+    lmList, bboxInfo = detector.findPosition(img, bboxWithHands=False)
+    if bboxInfo:
+        center = bboxInfo["center"]
+        cv2.circle(img, center, 5, (255, 0, 255), cv2.FILLED)
 
-    #Pose Detection
-    img = poseDetect.findPose(img)
-    lmListPose = poseDetect.findPosition(img, bboxWithHands=False)
-    
-    if lmListPose:
+    if lmList:
         #right shoulder landmark
-        rightShoulder = lmListPose[11][1:3]
-        leftShoulder = lmListPose[12][1:3]
-
+        rightShoulder = lmList[11][1:3]
+        leftShoulder = lmList[12][1:3]
         start = [rightShoulder[0] - 100, rightShoulder[1] - 100]
         #angle between shoulder points and 45-degree point i.e start
         A = Angle(leftShoulder, rightShoulder, start)
         
-
         #updated points for moving lines
         north_east = rotate_point(rightShoulder[0] + 1000, rightShoulder[1] - 1000, rightShoulder[0], rightShoulder[1], A-45)
         south_east = rotate_point(rightShoulder[0] + 1000, rightShoulder[1] + 1000, rightShoulder[0], rightShoulder[1], A-45)
         south_west = rotate_point(rightShoulder[0] - 1000, rightShoulder[1] + 1000, rightShoulder[0], rightShoulder[1], A-45)
         north_west = rotate_point(rightShoulder[0] - 1000, rightShoulder[1] - 1000, rightShoulder[0], rightShoulder[1], A-45)
 
+        #distance between right and left shoulder
+        dist = detector.findDistance(11,12,img,draw=True)
+        dist = dist[0]
+
         #circle
-        img = cv2.circle(img, rightShoulder, 150, (255, 255, 255), 3)
+        img = cv2.circle(img, rightShoulder, int(3/2*dist), (255, 255, 255), 3)
         
         #drawing lines 
         img = cv2.line(img, rightShoulder, north_east, blue, 2)  #north-east line
@@ -70,32 +86,32 @@ while True:
         img = cv2.line(img, rightShoulder, south_west, black, 2) #south-west line
         img = cv2.line(img, rightShoulder, north_west, red, 2)   #north-west line
 
+        landmark = lmList[19][1:3]
+        angle_LM = Angle(north_east, rightShoulder, landmark)
+
+        circle_bound = (landmark[0]-rightShoulder[0])**2 + (landmark[1]-rightShoulder[1])**2 > int(3/2*dist)**2
 
 
-        point = [rightShoulder[0]+100, rightShoulder[1]-100]
+        if circle_bound:
+            if angle_LM > 0 and angle_LM < 90:
+                print("Right")
 
-        landmark = lmListPose[19][1:3]
+            if angle_LM > 90 and angle_LM < 180:
+                print("Down")
 
-        angle_NE = Angle(point, rightShoulder, north_east)
-        angle_SE = Angle(point, rightShoulder, south_east) 
-        angle_SW = Angle(point, rightShoulder, south_west) 
-        angle_NW = Angle(point, rightShoulder, north_west)  
+            if angle_LM > 180 and angle_LM < 270:
+                print("Left")
 
-        angle_LM = Angle(point, rightShoulder, landmark)
-
-        if (angle_LM > angle_NE or angle_LM > 360 - angle_NE) and angle_LM < angle_SE:
-            print("Right")
-        if angle_LM < angle_SW and angle_LM > angle_SE:
-            print("Down")
-        if angle_LM < angle_NW and angle_LM > angle_SW:
-            print("Left")
-        if (angle_LM < angle_NE or angle_LM < 360 - angle_NE) and (angle_LM > angle_NW or angle_LM > 270 + angle_NW):
-            print("Up")
+            if angle_LM > 270 and angle_LM < 360:
+                print("Up")
+                
+        data.writerow([Date,Time,landmark[0],landmark[1]])
+                
 
     cv2.imshow("Image", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        f.close()
         break
-
 
 cap.release("q")
 cv2.destroyAllWindows()
